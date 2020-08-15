@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echoapp-deployment
+  labels:
+    app: echoapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: echoapp
+  template:
+    metadata:
+      labels:
+        app: echoapp
+    spec:
+      containers:
+      - name: echoapp
+        image: gcr.io/massive-glyph-285910/echo2
+        ports:
+        - containerPort: 3000
+        volumeMounts:
+        - name: mongo
+          mountPath: /app/config
+      volumes:
+      - name: mongo
+        configMap:
+          name: env-config          
+      imagePullSecrets:
+      - name: key-pair-echo        
